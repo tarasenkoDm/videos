@@ -12,9 +12,21 @@ class App extends React.Component {
 		selectedVideo: null
 	};
 
+	componentDidMount() {
+		this.onSearchSubmit('spring')
+	}
+
 	onSearchSubmit = async term => {
-		const response = await youtube.get("/search", { params: {q: term}} );
-		this.setState({ videos: response.data.items })
+		const response = await youtube.get("/search", {
+			params: {
+				q: term
+			}
+		});
+
+		this.setState({
+			videos: response.data.items,
+			selectedVideo: response.data.items[0]
+		})
 	};
 
 	onVideoSelect = (video) => {
@@ -24,9 +36,17 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="ui container">
-				<SearchBar onSearchFormSubmit={this.onSearchSubmit} />
-				<VideoDetail video={this.state.selectedVideo} />
-				<VideoList videos={this.state.videos} onVideoSelect={this.onVideoSelect} />
+				<SearchBar onSearchFormSubmit={this.onSearchSubmit}/>
+				<div className="ui grid">
+					<div className="ui row">
+						<div className="eleven wide column">
+							<VideoDetail video={this.state.selectedVideo}/>
+						</div>
+						<div className="five wide column">
+							<VideoList videos={this.state.videos} onVideoSelect={this.onVideoSelect}/>
+						</div>
+					</div>
+				</div>
 			</div>
 		)
 	}
