@@ -6,18 +6,22 @@ import VideoList from "./VideoList";
 
 class App extends React.Component {
 
-	state = {videos: []};
+	state = {videos: [], selectedVideo: null};
 
 	onSearchSubmit = async term => {
 		const response = await youtube.get("/search", { params: {q: term}} );
-		this.setState({videos: response.data.items})
+		this.setState({ videos: response.data.items })
+	};
+
+	onVideoSelect = (video) => {
+		this.setState({ selectedVideo: video })
 	};
 
 	render() {
 		return (
 			<div className="ui container">
 				<SearchBar onSearchFormSubmit={this.onSearchSubmit} />
-				<VideoList videos={this.state.videos} />
+				<VideoList videos={this.state.videos} onVideoSelect={this.onVideoSelect} />
 			</div>
 		)
 	}
